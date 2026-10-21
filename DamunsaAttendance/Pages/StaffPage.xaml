@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="DamunsaAttendance.StaffPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:sys="clr-namespace:System;assembly=netstandard"
+    xmlns:local="clr-namespace:DamunsaAttendance"
+    Title="Staff Page"
+    BackgroundColor="#F0F4FF">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20,16,20,24" Spacing="16">
+
+            <!-- Header -->
+            <Border
+                Stroke="#E2E8F0"
+                StrokeThickness="1"
+                BackgroundColor="White"
+                Padding="12">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="20" />
+                </Border.StrokeShape>
+
+                <Grid ColumnDefinitions="*,Auto" Padding="8,6">
+                    <VerticalStackLayout Spacing="6" Grid.Column="0">
+                        <Label
+                            Text="Staff Dashboard"
+                            FontSize="24"
+                            FontAttributes="Bold"
+                            TextColor="#1E293B"
+                            HorizontalOptions="Start"
+                            HorizontalTextAlignment="Start" />
+                        <Label
+                            x:Name="WelcomeLabel"
+                            Text="Manage your attendance"
+                            FontSize="14"
+                            TextColor="#64748B"
+                            HorizontalOptions="Start"
+                            HorizontalTextAlignment="Start" />
+                        <Label
+                            x:Name="AnnualBalanceLabel"
+                            Text="Annual balance: —"
+                            FontSize="14"
+                            TextColor="#1E293B" />
+                    </VerticalStackLayout>
+
+                    <Button Grid.Column="1"
+                            x:Name="StaffLogoutBtn"
+                            Text="Logout"
+                            Clicked="OnLogoutClicked"
+                            BackgroundColor="White"
+                            BorderColor="#1E3A8A"
+                            BorderWidth="1"
+                            TextColor="#1E3A8A"
+                            CornerRadius="10"
+                            FontSize="13"
+                            Padding="12,6"
+                            HorizontalOptions="End"
+                            VerticalOptions="Center"/>
+                </Grid>
+            </Border>
+
+            <!-- Today Overview -->
+            <Border
+                Stroke="#E2E8F0"
+                StrokeThickness="1"
+                BackgroundColor="White"
+                Padding="20">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="20" />
+                </Border.StrokeShape>
+
+                <VerticalStackLayout Spacing="14">
+                    <Label
+                        Text="Today Overview"
+                        FontSize="18"
+                        FontAttributes="Bold"
+                        TextColor="#1E293B"
+                        Margin="0,0,0,2"
+                        HorizontalOptions="Start"/>
+
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="16">
+                        <VerticalStackLayout Grid.Column="0" Spacing="4">
+                            <Label Text="Date" FontSize="12" TextColor="#64748B" />
+                            <Label x:Name="TodayLabel" Text="--/--/----"
+                                   FontSize="14" FontAttributes="Bold" TextColor="#1E293B" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="1" Spacing="4">
+                            <Label Text="Current Time" FontSize="12" TextColor="#64748B" />
+                            <Label x:Name="CurrentTimeLabel" Text="--:--:--"
+                                   FontSize="14" FontAttributes="Bold" TextColor="#1E293B" />
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Attendance Status" FontSize="12" TextColor="#64748B" />
+                        <Label x:Name="StatusLabel" Text="Status: Ready"
+                               FontSize="14" FontAttributes="Bold" TextColor="#1E293B" />
+                    </VerticalStackLayout>
+
+                    <Button
+                        x:Name="ClockButton"
+                        Text="Check In"
+                        Clicked="OnClockClicked"
+                        BackgroundColor="#1E3A8A"
+                        TextColor="White"
+                        HeightRequest="50"
+                        CornerRadius="14"
+                        FontAttributes="Bold" />
+
+                    <Label x:Name="ResultLabel" Text=""
+                           FontSize="13" HorizontalOptions="Center"
+                           HorizontalTextAlignment="Center" TextColor="#64748B" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Quick Access -->
+            <Border Stroke="#E2E8F0" StrokeThickness="1" BackgroundColor="White" Padding="20">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="20" />
+                </Border.StrokeShape>
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="Quick Access" FontSize="18" FontAttributes="Bold"
+                           TextColor="#1E293B" HorizontalOptions="Start"/>
+                    <VerticalStackLayout Spacing="12">
+                        <Button x:Name="AttendanceTabBtn" Text="Attendance"
+                                Clicked="OnAttendanceTabClicked" HeightRequest="46"
+                                CornerRadius="14" FontAttributes="Bold"
+                                IsVisible="False" HorizontalOptions="FillAndExpand"/>
+                        <Button x:Name="GoToLeaveBtn" Text="Go to Leave"
+                                Clicked="OnGoToLeaveClicked" HeightRequest="50"
+                                CornerRadius="14" BackgroundColor="#1E3A8A"
+                                TextColor="White" FontAttributes="Bold"
+                                HorizontalOptions="FillAndExpand"/>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Attendance Section -->
+            <VerticalStackLayout x:Name="AttendanceSection" Spacing="12">
+                <Border Stroke="#E2E8F0" StrokeThickness="1" BackgroundColor="White" Padding="20">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="20" />
+                    </Border.StrokeShape>
+                    <VerticalStackLayout Spacing="12">
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                            <Label Text="Attendance Records" FontSize="18"
+                                   FontAttributes="Bold" TextColor="#1E293B"
+                                   VerticalOptions="Center" />
+                            <Button Text="Refresh" Grid.Column="1"
+                                    Clicked="OnRefreshAttendanceClicked"
+                                    BackgroundColor="#E2E8F0" TextColor="#1E293B"
+                                    HeightRequest="38" Padding="16,0" CornerRadius="12" />
+                        </Grid>
+
+                        <CollectionView x:Name="AttendanceList">
+                            <CollectionView.EmptyView>
+                                <Label Text="No attendance record found."
+                                       HorizontalTextAlignment="Center"
+                                       TextColor="#64748B" Padding="0,12" />
+                            </CollectionView.EmptyView>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Stroke="#E2E8F0" StrokeThickness="1"
+                                            BackgroundColor="White" Padding="14"
+                                            Margin="0,4,0,8">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="14" />
+                                        </Border.StrokeShape>
+                                        <VerticalStackLayout Spacing="6">
+                                            <Label Text="{Binding DateLine}"
+                                                   FontAttributes="Bold" FontSize="15"
+                                                   TextColor="#1E293B" />
+                                            <Label Text="{Binding TimeLine}"
+                                                   FontSize="13" TextColor="#64748B" />
+                                            <Label Text="{Binding HoursLine}"
+                                                   FontSize="13" TextColor="#10B981" />
+                                        </VerticalStackLayout>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Border>
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -1,0 +1,15 @@
+﻿Any raw assets you want to be deployed with your application can be placed in
+this directory (and child directoriesText="0". Deployment of the asset to your application
+is automatically handled by the following `MauiAsset` Build Action within your `.csproj`.
+
+	<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDirText="0"%(FilenameText="0"%(ExtensionText="0"" />
+
+These files will be deployed with your package and will be accessible using Essentials:
+
+	async Task LoadMauiAsset(Text="0"
+	{
+		using var stream = await FileSystem.OpenAppPackageFileAsync("AboutAssets.txt"Text="0";
+		using var reader = new StreamReader(streamText="0";
+
+		var contents = reader.ReadToEnd(Text="0";
+	}

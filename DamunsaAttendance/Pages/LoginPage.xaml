@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="DamunsaAttendance.LoginPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    BackgroundColor="#F0F4FF">
+
+    <ScrollView>
+        <Grid>
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#E0EAFC" Offset="0.0" />
+                    <GradientStop Color="#CFDEF3" Offset="1.0" />
+                </LinearGradientBrush>
+            </Grid.Background>
+
+            <Border Style="{StaticResource CardStyle}"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    MaximumWidthRequest="560"
+                    Margin="24"
+                    Padding="0"
+                    Stroke="#E2E8F0"
+                    StrokeThickness="1"
+                    BackgroundColor="White"
+                    StrokeShape="RoundRectangle 24">
+
+                <Border.Shadow>
+                    <Shadow Brush="#22000000"
+                            Offset="4,4"
+                            Radius="8"
+                            Opacity="1" />
+                </Border.Shadow>
+
+                <VerticalStackLayout Spacing="24" Padding="32">
+
+                    <Image Source="login_illustration.png"
+                           HeightRequest="90"
+                           HorizontalOptions="Center"
+                           Margin="0,0,0,8" />
+
+                    <Label Text="Welcome Back"
+                           FontSize="32"
+                           FontAttributes="Bold"
+                           HorizontalOptions="Center"
+                           TextColor="#1E293B" />
+
+                    <Label x:Name="SubtitleLabel"
+                           Text="Sign in to continue"
+                           FontSize="15"
+                           TextColor="#64748B"
+                           HorizontalOptions="Center"
+                           Margin="0,0,0,12" />
+
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Username"
+                               FontAttributes="Bold"
+                               FontSize="14"
+                               TextColor="#1E293B" />
+                        <Frame HasShadow="False"
+                               Padding="0"
+                               CornerRadius="12"
+                               BackgroundColor="#F0F4FF"
+                               BorderColor="#E2E8F0"
+                               HeightRequest="52">
+                            <Entry x:Name="UsernameEntry"
+                                   Placeholder="Enter username"
+                                   BackgroundColor="Transparent"
+                                   TextColor="#1E293B"
+                                   HeightRequest="52"
+                                   FontSize="15"
+                                   Completed="OnCompleted"
+                                   TextChanged="OnTextChanged" />
+                        </Frame>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Password"
+                               FontAttributes="Bold"
+                               FontSize="14"
+                               TextColor="#1E293B" />
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                            <Frame HasShadow="False"
+                                   Padding="0"
+                                   CornerRadius="12"
+                                   BackgroundColor="#F0F4FF"
+                                   BorderColor="#E2E8F0"
+                                   HeightRequest="52"
+                                   Grid.Column="0">
+                                <Entry x:Name="PasswordEntry"
+                                       Placeholder="Enter password"
+                                       IsPassword="True"
+                                       BackgroundColor="Transparent"
+                                       TextColor="#1E293B"
+                                       HeightRequest="52"
+                                       FontSize="15"
+                                       Completed="OnCompleted"
+                                       TextChanged="OnTextChanged" />
+                            </Frame>
+                            <Button x:Name="TogglePasswordBtn"
+                                    Grid.Column="1"
+                                    Text="Show"
+                                    Clicked="OnTogglePasswordClicked"
+                                    BackgroundColor="#E2E8F0"
+                                    TextColor="#1E293B"
+                                    CornerRadius="12"
+                                    WidthRequest="80"
+                                    HeightRequest="52"
+                                    FontAttributes="Bold" />
+                        </Grid>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Select Role"
+                               FontAttributes="Bold"
+                               FontSize="14"
+                               TextColor="#1E293B" />
+
+                        <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
+                            <Button x:Name="StaffRoleBtn"
+                                    Grid.Column="0"
+                                    Text="Staff"
+                                    Clicked="OnRoleStaff"
+                                    CornerRadius="12"
+                                    BackgroundColor="#F1F5F9"
+                                    TextColor="#1E293B"
+                                    FontAttributes="Bold"
+                                    HorizontalOptions="FillAndExpand"
+                                    LineBreakMode="NoWrap"
+                                    Padding="12,6"
+                                    MinimumWidthRequest="100"
+                                    HeightRequest="44" />
+
+                            <Button x:Name="AdminRoleBtn"
+                                    Grid.Column="1"
+                                    Text="Admin"
+                                    Clicked="OnRoleAdmin"
+                                    CornerRadius="12"
+                                    BackgroundColor="#F1F5F9"
+                                    TextColor="#1E293B"
+                                    FontAttributes="Bold"
+                                    HorizontalOptions="FillAndExpand"
+                                    LineBreakMode="NoWrap"
+                                    Padding="12,6"
+                                    MinimumWidthRequest="100"
+                                    HeightRequest="44" />
+
+                            <Button x:Name="OwnerRoleBtn"
+                                    Grid.Column="2"
+                                    Text="Owner"
+                                    Clicked="OnRoleOwner"
+                                    CornerRadius="12"
+                                    BackgroundColor="#F1F5F9"
+                                    TextColor="#1E293B"
+                                    FontAttributes="Bold"
+                                    HorizontalOptions="FillAndExpand"
+                                    LineBreakMode="NoWrap"
+                                    Padding="12,6"
+                                    MinimumWidthRequest="100"
+                                    HeightRequest="44" />
+                        </Grid>
+                    </VerticalStackLayout>
+
+                    <Label x:Name="LoginHintLabel"
+                           Text="Please enter your credentials."
+                           FontSize="13"
+                           TextColor="#64748B"
+                           HorizontalOptions="Center"
+                           Margin="0,8,0,0" />
+
+                    <Button x:Name="LoginButton"
+                            Text="Sign In"
+                            Clicked="OnLoginClicked"
+                            BackgroundColor="#1E3A8A"
+                            TextColor="White"
+                            HeightRequest="54"
+                            CornerRadius="14"
+                            FontAttributes="Bold"
+                            FontSize="17"
+                            Margin="0,8,0,0" />
+
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+    </ScrollView>
+</ContentPage>

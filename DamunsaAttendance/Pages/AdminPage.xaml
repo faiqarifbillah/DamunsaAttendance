@@ -1,0 +1,596 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="DamunsaAttendance.AdminPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Admin Portal"
+    BackgroundColor="#F8FAFC">
+
+    <Grid RowDefinitions="Auto,Auto,*">
+
+        <!-- Header with Logout -->
+        <Grid Grid.Row="0"
+              Padding="24,20"
+              BackgroundColor="White"
+              ColumnDefinitions="Auto,*,Auto">
+
+            <BoxView Grid.ColumnSpan="3"
+                     HeightRequest="1"
+                     Color="#E2E8F0"
+                     VerticalOptions="End"/>
+
+            <HorizontalStackLayout Spacing="12" VerticalOptions="Center">
+                <Label Text="◆"
+                       FontSize="26"
+                       TextColor="#7C3AED"
+                       VerticalOptions="Center"/>
+                <Label Text="Admin Portal"
+                       FontSize="22"
+                       FontAttributes="Bold"
+                       TextColor="#111827"
+                       VerticalOptions="Center"/>
+            </HorizontalStackLayout>
+
+            <Button Grid.Column="2"
+                    Text="Logout"
+                    Clicked="OnLogoutClicked"
+                    BackgroundColor="White"
+                    BorderColor="#2196F3"
+                    BorderWidth="1"
+                    TextColor="#2196F3"
+                    CornerRadius="10"
+                    FontSize="13"
+                    Padding="12,6"
+                    VerticalOptions="Center"/>
+        </Grid>
+
+        <!-- Tab Bar -->
+        <Border Grid.Row="1"
+                BackgroundColor="#E5E7EB"
+                Padding="8"
+                StrokeThickness="0"
+                Margin="16,12,16,12">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="20" />
+            </Border.StrokeShape>
+
+            <Grid ColumnDefinitions="*,*,*"
+                  ColumnSpacing="6"
+                  HeightRequest="60"
+                  VerticalOptions="Center">
+
+                <Border Grid.Column="0"
+                        x:Name="AttendanceTabBorder"
+                        Stroke="#CBD5E1"
+                        StrokeThickness="1"
+                        StrokeShape="RoundRectangle 16"
+                        BackgroundColor="White"
+                        Padding="0"
+                        HorizontalOptions="Fill">
+                    <Button x:Name="AttendanceTabButton"
+                            Text="Attendance"
+                            Clicked="OnAttendanceTabClicked"
+                            BackgroundColor="Transparent"
+                            TextColor="#111827"
+                            FontSize="16"
+                            FontAttributes="Bold"
+                            HorizontalOptions="FillAndExpand"
+                            VerticalOptions="Center"
+                            HeightRequest="56"
+                            BorderWidth="0"/>
+                </Border>
+
+                <Border Grid.Column="1"
+                        x:Name="LeaveTabBorder"
+                        Stroke="Transparent"
+                        StrokeThickness="0"
+                        StrokeShape="RoundRectangle 16"
+                        BackgroundColor="Transparent"
+                        Padding="0"
+                        HorizontalOptions="Fill">
+                    <Button x:Name="LeaveTabButton"
+                            Text="Leave"
+                            Clicked="OnLeaveRequestsTabClicked"
+                            BackgroundColor="Transparent"
+                            TextColor="#64748B"
+                            FontSize="16"
+                            HorizontalOptions="FillAndExpand"
+                            VerticalOptions="Center"
+                            HeightRequest="56"
+                            BorderWidth="0"/>
+                </Border>
+
+                <Border Grid.Column="2"
+                        x:Name="StaffTabBorder"
+                        Stroke="Transparent"
+                        StrokeThickness="0"
+                        StrokeShape="RoundRectangle 16"
+                        BackgroundColor="Transparent"
+                        Padding="0"
+                        HorizontalOptions="Fill">
+                    <Button x:Name="StaffTabButton"
+                            Text="Staff"
+                            Clicked="OnStaffTabClicked"
+                            BackgroundColor="Transparent"
+                            TextColor="#64748B"
+                            FontSize="16"
+                            HorizontalOptions="FillAndExpand"
+                            VerticalOptions="Center"
+                            HeightRequest="56"
+                            BorderWidth="0"/>
+                </Border>
+            </Grid>
+        </Border>
+
+        <!-- Content Area -->
+        <Grid Grid.Row="2" Padding="0,8,0,16">
+
+            <!-- ═══════════════════════════════════════ -->
+            <!-- Attendance Tab Content                  -->
+            <!-- ═══════════════════════════════════════ -->
+            <Grid x:Name="AttendanceContent"
+                  Padding="16,8,16,16"
+                  RowDefinitions="Auto,Auto,*"
+                  IsVisible="True"
+                  VerticalOptions="FillAndExpand">
+
+                <!-- Row 0: Title -->
+                <VerticalStackLayout Grid.Row="0" Spacing="4" Margin="0,4,0,0">
+                    <Label Text="Today's Attendance"
+                           FontSize="22"
+                           FontAttributes="Bold"
+                           TextColor="#111827"/>
+                    <Label x:Name="TodayDateLabel"
+                           FontSize="14"
+                           TextColor="#64748B"/>
+
+                    <!-- Late analytics card (filled by UpdateLateAnalytics) -->
+                    <Border BackgroundColor="White" Stroke="#E2E8F0" StrokeThickness="1" Padding="12" Margin="0,8,0,0">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="14"/>
+                        </Border.StrokeShape>
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="Late Analytics (this month)"
+                                   FontSize="15"
+                                   FontAttributes="Bold"
+                                   TextColor="#111827"/>
+                            <Label x:Name="LateAnalyticsSubLabel"
+                                   FontSize="12"
+                                   TextColor="#64748B"/>
+                            <VerticalStackLayout x:Name="LateAnalyticsPanel" Spacing="8"/>
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+
+                <!-- Row 1: Summary Cards -->
+                <Grid Grid.Row="1"
+                      ColumnDefinitions="*,*,*,*"
+                      ColumnSpacing="8"
+                      Margin="0,12,0,4">
+
+                    <!-- Present Today -->
+                    <Border Grid.Column="0"
+                            BackgroundColor="#10B981"
+                            Stroke="Transparent"
+                            StrokeShape="RoundRectangle 14"
+                            Padding="6,10">
+                        <VerticalStackLayout Spacing="2" HorizontalOptions="Center">
+                            <Label x:Name="SummaryPresentCount"
+                                   Text="0"
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   TextColor="White"
+                                   HorizontalTextAlignment="Center"/>
+                            <Label Text="Present"
+                                   FontSize="10"
+                                   TextColor="White"
+                                   HorizontalTextAlignment="Center"
+                                   LineBreakMode="NoWrap"/>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Late -->
+                    <Border Grid.Column="1"
+                            BackgroundColor="#F59E0B"
+                            Stroke="Transparent"
+                            StrokeShape="RoundRectangle 14"
+                            Padding="6,10">
+                        <VerticalStackLayout Spacing="2" HorizontalOptions="Center">
+                            <Label x:Name="SummaryLateCount"
+                                   Text="0"
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   TextColor="White"
+                                   HorizontalTextAlignment="Center"/>
+                            <Label Text="Late"
+                                   FontSize="10"
+                                   TextColor="White"
+                                   HorizontalTextAlignment="Center"
+                                   LineBreakMode="NoWrap"/>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- On Leave -->
+                    <Border Grid.Column="2"
+                            BackgroundColor="#3B82F6"
+                            Stroke="Transparent"
+                            StrokeShape="RoundRectangle 14"
+                            Padding="6,10">
+                        <VerticalStackLayout Spacing="2" HorizontalOptions="Center">
+                            <Label x:Name="SummaryOnLeaveCount"
+                                   Text="0"
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   TextColor="White"
+                                   HorizontalTextAlignment="Center"/>
+                            <Label Text="On Leave"
+                                   FontSize="10"
+                                   TextColor="White"
+                                   HorizontalTextAlignment="Center"
+                                   LineBreakMode="NoWrap"/>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Total Staff -->
+                    <Border Grid.Column="3"
+                            BackgroundColor="#7C3AED"
+                            Stroke="Transparent"
+                            StrokeShape="RoundRectangle 14"
+                            Padding="6,10">
+                        <VerticalStackLayout Spacing="2" HorizontalOptions="Center">
+                            <Label x:Name="SummaryTotalCount"
+                                   Text="10"
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   TextColor="White"
+                                   HorizontalTextAlignment="Center"/>
+                            <Label Text="Total"
+                                   FontSize="10"
+                                   TextColor="White"
+                                   HorizontalTextAlignment="Center"
+                                   LineBreakMode="NoWrap"/>
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+
+                <!-- Row 2: Attendance CollectionView -->
+                <CollectionView Grid.Row="2"
+                                x:Name="TodayAttendanceList"
+                                SelectionMode="None"
+                                ItemsLayout="VerticalList"
+                                VerticalOptions="FillAndExpand"
+                                Margin="0,8,0,0">
+                    <CollectionView.EmptyView>
+                        <Label Text="No attendance records for today."
+                               TextColor="#94A3B8"
+                               FontSize="14"
+                               HorizontalTextAlignment="Center"
+                               Padding="0,40"/>
+                    </CollectionView.EmptyView>
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border Stroke="#E5E7EB"
+                                    StrokeThickness="1"
+                                    StrokeShape="RoundRectangle 16"
+                                    Padding="16"
+                                    Margin="0,0,0,12"
+                                    BackgroundColor="White"
+                                    Shadow="{Shadow Brush=#1E293B, Opacity=0.04, Radius=8, Offset='0,2'}">
+
+                                <Grid RowDefinitions="Auto,Auto" RowSpacing="10">
+
+                                    <!-- Row 1: Name + Department and Status Badge -->
+                                    <Grid Grid.Row="0" ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                                        <VerticalStackLayout Spacing="2" VerticalOptions="Center">
+                                            <Label Text="{Binding UserName}"
+                                                   FontSize="17"
+                                                   FontAttributes="Bold"
+                                                   TextColor="#111827"
+                                                   MaxLines="1"
+                                                   LineBreakMode="TailTruncation"/>
+                                            <Label Text="{Binding Department}"
+                                                   FontSize="12"
+                                                   TextColor="#64748B"
+                                                   MaxLines="1"
+                                                   LineBreakMode="TailTruncation"/>
+                                        </VerticalStackLayout>
+
+                                        <Border Grid.Column="1"
+                                                Padding="10,4"
+                                                Stroke="Transparent"
+                                                StrokeShape="RoundRectangle 10"
+                                                BackgroundColor="{Binding StatusColor}"
+                                                HorizontalOptions="End"
+                                                VerticalOptions="Center">
+                                            <Label Text="{Binding Status}"
+                                                   TextColor="White"
+                                                   FontSize="12"
+                                                   FontAttributes="Bold"
+                                                   HorizontalTextAlignment="Center"
+                                                   VerticalTextAlignment="Center"
+                                                   MaxLines="1"
+                                                   LineBreakMode="NoWrap"/>
+                                        </Border>
+                                    </Grid>
+
+                                    <!-- Row 2: Check-In / Check-Out / Hours -->
+                                    <Grid Grid.Row="1" ColumnDefinitions="*,Auto,Auto" ColumnSpacing="12">
+                                        <Label Grid.Column="0"
+                                               Text="{Binding CheckInDisplay}"
+                                               FontSize="13"
+                                               TextColor="#374151"
+                                               LineBreakMode="WordWrap"/>
+                                        <Label Grid.Column="1"
+                                               Text="{Binding CheckOutDisplay}"
+                                               FontSize="13"
+                                               TextColor="#374151"
+                                               LineBreakMode="WordWrap"/>
+                                        <Label Grid.Column="2"
+                                               Text="{Binding HoursDisplay}"
+                                               FontSize="13"
+                                               TextColor="#374151"
+                                               FontAttributes="Bold"
+                                               LineBreakMode="WordWrap"/>
+                                    </Grid>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Grid>
+
+            <!-- ═══════════════════════════════════════ -->
+            <!-- Leave Requests Tab Content              -->
+            <!-- ═══════════════════════════════════════ -->
+            <Grid x:Name="LeaveContent"
+                  Padding="16,8,16,16"
+                  RowDefinitions="Auto,*"
+                  IsVisible="False"
+                  VerticalOptions="FillAndExpand">
+
+                <VerticalStackLayout Grid.Row="0" Spacing="6">
+                    <Label Text="Leave Requests"
+                           FontSize="22"
+                           FontAttributes="Bold"
+                           TextColor="#111827"/>
+                    <Label Text="Review and approve staff leave requests"
+                           FontSize="14"
+                           TextColor="#64748B"/>
+                </VerticalStackLayout>
+
+                <CollectionView Grid.Row="1"
+                                x:Name="LeaveRequestsList"
+                                SelectionMode="None"
+                                VerticalOptions="FillAndExpand"
+                                ItemsLayout="VerticalList">
+                    <CollectionView.EmptyView>
+                        <Label Text="No leave requests found."
+                               TextColor="#94A3B8"
+                               FontSize="14"
+                               HorizontalTextAlignment="Center"
+                               Padding="0,40"/>
+                    </CollectionView.EmptyView>
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border Stroke="#E5E7EB"
+                                    StrokeThickness="1"
+                                    StrokeShape="RoundRectangle 16"
+                                    Padding="14"
+                                    Margin="0,0,0,12"
+                                    BackgroundColor="White"
+                                    Shadow="{Shadow Brush=#1E293B, Opacity=0.04, Radius=8, Offset='0,2'}">
+
+                                <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="10">
+
+                                    <!-- Row 1: User Name and Status Badge -->
+                                    <Grid Grid.Row="0" ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                                        <VerticalStackLayout Spacing="4">
+                                            <Label Text="{Binding UserName}"
+                                                   FontSize="17"
+                                                   FontAttributes="Bold"
+                                                   TextColor="#111827"
+                                                   MaxLines="1"
+                                                   LineBreakMode="TailTruncation"/>
+                                            <Label Text="{Binding LeaveType}"
+                                                   FontSize="13"
+                                                   TextColor="#374151"
+                                                   MaxLines="1"
+                                                   LineBreakMode="TailTruncation"/>
+                                        </VerticalStackLayout>
+
+                                        <Border Grid.Column="1"
+                                                Padding="10,6"
+                                                Stroke="Transparent"
+                                                StrokeShape="RoundRectangle 10"
+                                                BackgroundColor="{Binding StatusColor}"
+                                                HorizontalOptions="End"
+                                                VerticalOptions="Start">
+                                            <Label Text="{Binding Status}"
+                                                   TextColor="White"
+                                                   FontSize="12"
+                                                   FontAttributes="Bold"
+                                                   HorizontalTextAlignment="Center"
+                                                   VerticalTextAlignment="Center"
+                                                   MaxLines="1"
+                                                   LineBreakMode="NoWrap"/>
+                                        </Border>
+                                    </Grid>
+
+                                    <!-- Row 2: Details -->
+                                    <VerticalStackLayout Grid.Row="1" Spacing="6">
+                                        <Label Text="{Binding PeriodDisplay}"
+                                               FontSize="14"
+                                               TextColor="#374151"
+                                               MaxLines="1"
+                                               LineBreakMode="TailTruncation"/>
+                                        <Label Text="{Binding SubmittedDisplay}"
+                                               FontSize="13"
+                                               TextColor="#64748B"
+                                               MaxLines="1"
+                                               LineBreakMode="TailTruncation"/>
+                                        <Label Text="{Binding ReasonDisplay}"
+                                               FontSize="14"
+                                               TextColor="#374151"
+                                               LineBreakMode="WordWrap"/>
+                                    </VerticalStackLayout>
+
+                                    <!-- Row 3: Action Buttons (only shown for Pending) -->
+                                    <Grid Grid.Row="2"
+                                          ColumnDefinitions="*,*"
+                                          ColumnSpacing="12"
+                                          IsVisible="{Binding IsPending}">
+                                        <Button Grid.Column="0"
+                                                Text="✓ Approve"
+                                                Clicked="OnApproveClicked"
+                                                Pressed="OnActionPressed"
+                                                Released="OnActionReleased"
+                                                BackgroundColor="#10B981"
+                                                TextColor="White"
+                                                CornerRadius="12"
+                                                HeightRequest="48"
+                                                FontSize="14"
+                                                FontAttributes="Bold"
+                                                IsEnabled="True"
+                                                InputTransparent="False"/>
+                                        <Button Grid.Column="1"
+                                                Text="⊗ Reject"
+                                                Clicked="OnRejectClicked"
+                                                Pressed="OnActionPressed"
+                                                Released="OnActionReleased"
+                                                BackgroundColor="#EF4444"
+                                                TextColor="White"
+                                                CornerRadius="12"
+                                                HeightRequest="48"
+                                                FontSize="14"
+                                                FontAttributes="Bold"
+                                                IsEnabled="True"
+                                                InputTransparent="False"/>
+                                    </Grid>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Grid>
+
+            <!-- ═══════════════════════════════════════ -->
+            <!-- Staff Tab Content                       -->
+            <!-- ═══════════════════════════════════════ -->
+            <Grid x:Name="StaffContent"
+                  Padding="16,8,16,16"
+                  RowDefinitions="Auto,*"
+                  IsVisible="False"
+                  VerticalOptions="FillAndExpand">
+
+                <VerticalStackLayout Grid.Row="0" Spacing="6">
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Staff Management"
+                               FontSize="22"
+                               FontAttributes="Bold"
+                               TextColor="#111827"/>
+                    </HorizontalStackLayout>
+
+                    <Label Text="View and manage warehouse staff"
+                           FontSize="14"
+                           TextColor="#64748B"/>
+
+                    <Border Stroke="#E5E7EB"
+                            StrokeThickness="1"
+                            StrokeShape="RoundRectangle 12"
+                            BackgroundColor="White"
+                            Padding="12"
+                            Margin="0,4,0,4"
+                            Shadow="{Shadow Brush=#1E293B, Opacity=0.04, Radius=8, Offset='0,2'}">
+                        <Entry x:Name="StaffSearchEntry"
+                               Placeholder="Search staff by name or department..."
+                               PlaceholderColor="#94A3B8"
+                               TextColor="#111827"
+                               TextChanged="OnStaffSearchTextChanged"
+                               FontSize="14"/>
+                    </Border>
+                </VerticalStackLayout>
+
+                <CollectionView Grid.Row="1"
+                                x:Name="StaffList"
+                                SelectionMode="None"
+                                VerticalOptions="FillAndExpand"
+                                ItemsLayout="VerticalList">
+                    <CollectionView.EmptyView>
+                        <Label Text="No staff members found."
+                               TextColor="#94A3B8"
+                               FontSize="14"
+                               HorizontalTextAlignment="Center"
+                               Padding="0,40"/>
+                    </CollectionView.EmptyView>
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border Stroke="#E5E7EB"
+                                    StrokeThickness="1"
+                                    StrokeShape="RoundRectangle 16"
+                                    Padding="12"
+                                    Margin="0,0,0,12"
+                                    BackgroundColor="White"
+                                    Shadow="{Shadow Brush=#1E293B, Opacity=0.04, Radius=12, Offset='0,2'}">
+
+                                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12" VerticalOptions="Center">
+                                    <!-- Initials circle -->
+                                    <Frame Grid.Column="0"
+                                           WidthRequest="48"
+                                           HeightRequest="48"
+                                           CornerRadius="24"
+                                           BackgroundColor="#EEF2FF"
+                                           Padding="0"
+                                           HasShadow="False"
+                                           VerticalOptions="Center"
+                                           HorizontalOptions="Center">
+                                        <Label Text="{Binding Initials}"
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center"
+                                               FontAttributes="Bold"
+                                               TextColor="#111827"/>
+                                    </Frame>
+
+                                    <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                                        <Label Text="{Binding UserName}"
+                                               FontSize="16"
+                                               FontAttributes="Bold"
+                                               TextColor="#111827"
+                                               MaxLines="1"
+                                               LineBreakMode="TailTruncation"/>
+                                        <Label Text="{Binding Department}"
+                                               FontSize="14"
+                                               TextColor="#64748B"
+                                               MaxLines="1"
+                                               LineBreakMode="TailTruncation"/>
+                                    </VerticalStackLayout>
+
+                                    <Border Grid.Column="2"
+                                            Padding="10,6"
+                                            Stroke="Transparent"
+                                            StrokeShape="RoundRectangle 10"
+                                            BackgroundColor="#10B981"
+                                            HorizontalOptions="End"
+                                            VerticalOptions="Center">
+                                        <Label Text="active"
+                                               TextColor="White"
+                                               FontSize="12"
+                                               FontAttributes="Bold"
+                                               HorizontalTextAlignment="Center"
+                                               VerticalTextAlignment="Center"
+                                               MaxLines="1"
+                                               LineBreakMode="NoWrap"/>
+                                    </Border>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Grid>
+
+        </Grid>
+    </Grid>
+</ContentPage>
+

@@ -1,0 +1,491 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="DamunsaAttendance.OwnerPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    BackgroundColor="#F9FAFB">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="18" Spacing="20">
+
+            <!-- HEADER -->
+            <Grid ColumnDefinitions="*,Auto" Margin="0,8,0,12">
+                <Label Text="Owner Dashboard"
+                       FontSize="26"
+                       FontAttributes="Bold"
+                       TextColor="#0F172A"
+                       VerticalOptions="Center" />
+                <Button Grid.Column="1"
+                        x:Name="LogoutBtn"
+                        Text="Logout"
+                        Clicked="OnLogoutClicked"
+                        BackgroundColor="White"
+                        BorderColor="#2196F3"
+                        BorderWidth="1"
+                        TextColor="#2196F3"
+                        CornerRadius="10"
+                        FontSize="13"
+                        Padding="12,6"
+                        VerticalOptions="Center"
+                        HorizontalOptions="End"/>
+            </Grid>
+
+            <!-- Loading / Empty -->
+            <ActivityIndicator x:Name="LoadingIndicator"
+                               IsVisible="False"
+                               IsRunning="False"
+                               Color="#2563EB"
+                               HorizontalOptions="Center"
+                               HeightRequest="36"/>
+
+            <Label x:Name="EmptyStateLabel"
+                   Text="No data available yet"
+                   IsVisible="False"
+                   HorizontalOptions="Center"
+                   FontSize="15"
+                   TextColor="#6B7280"/>
+
+            <!-- SUMMARY CARDS -->
+            <Grid ColumnDefinitions="*,*"
+                  RowDefinitions="Auto,Auto"
+                  RowSpacing="14"
+                  ColumnSpacing="12">
+
+                <!-- Total Staff -->
+                <Border x:Name="TotalStaffCard"
+                        Grid.Row="0" Grid.Column="0"
+                        BackgroundColor="White"
+                        Stroke="#E5E7EB"
+                        StrokeThickness="1"
+                        Padding="16"
+                        Shadow="{Shadow Brush=#000000, Opacity=0.06, Radius=8, Offset='0,3'}">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="14"/>
+                    </Border.StrokeShape>
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="Total Staff"
+                                   FontSize="13"
+                                   TextColor="#6B7280"/>
+                            <Label x:Name="TotalStaffValue"
+                                   Text="—"
+                                   FontSize="34"
+                                   FontAttributes="Bold"
+                                   TextColor="#0F172A"/>
+                            <Label Text="Headcount"
+                                   FontSize="12"
+                                   TextColor="#94A3B8"/>
+                        </VerticalStackLayout>
+                        <Ellipse Grid.Column="1"
+                                 Fill="#E0F2FE"
+                                 WidthRequest="44"
+                                 HeightRequest="44"
+                                 HorizontalOptions="End"
+                                 VerticalOptions="Center"/>
+                    </Grid>
+                </Border>
+
+                <!-- Present Today -->
+                <Border x:Name="PresentCard"
+                        Grid.Row="0" Grid.Column="1"
+                        BackgroundColor="White"
+                        Stroke="#E5E7EB"
+                        StrokeThickness="1"
+                        Padding="16"
+                        Shadow="{Shadow Brush=#000000, Opacity=0.06, Radius=8, Offset='0,3'}">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="14"/>
+                    </Border.StrokeShape>
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="Present Today"
+                                   FontSize="13"
+                                   TextColor="#6B7280"/>
+                            <Label x:Name="PresentValue"
+                                   Text="—"
+                                   FontSize="34"
+                                   FontAttributes="Bold"
+                                   TextColor="#0F172A"/>
+                            <Label Text="Live attendance"
+                                   FontSize="12"
+                                   TextColor="#94A3B8"/>
+                        </VerticalStackLayout>
+                        <Ellipse Grid.Column="1"
+                                 Fill="#ECFDF5"
+                                 WidthRequest="44"
+                                 HeightRequest="44"
+                                 HorizontalOptions="End"
+                                 VerticalOptions="Center"/>
+                    </Grid>
+                </Border>
+
+                <!-- Absent Today -->
+                <Border x:Name="AbsentCard"
+                        Grid.Row="1" Grid.Column="0"
+                        BackgroundColor="White"
+                        Stroke="#E5E7EB"
+                        StrokeThickness="1"
+                        Padding="16"
+                        Shadow="{Shadow Brush=#000000, Opacity=0.06, Radius=8, Offset='0,3'}">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="14"/>
+                    </Border.StrokeShape>
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="Absent Today"
+                                   FontSize="13"
+                                   TextColor="#6B7280"/>
+                            <Label x:Name="AbsentValue"
+                                   Text="—"
+                                   FontSize="34"
+                                   FontAttributes="Bold"
+                                   TextColor="#0F172A"/>
+                            <Label Text="Not checked in"
+                                   FontSize="12"
+                                   TextColor="#94A3B8"/>
+                        </VerticalStackLayout>
+                        <Ellipse Grid.Column="1"
+                                 Fill="#FEE2E2"
+                                 WidthRequest="44"
+                                 HeightRequest="44"
+                                 HorizontalOptions="End"
+                                 VerticalOptions="Center"/>
+                    </Grid>
+                </Border>
+
+                <!-- Pending Leaves -->
+                <Border x:Name="PendingCard"
+                        Grid.Row="1" Grid.Column="1"
+                        BackgroundColor="White"
+                        Stroke="#E5E7EB"
+                        StrokeThickness="1"
+                        Padding="16"
+                        Shadow="{Shadow Brush=#000000, Opacity=0.06, Radius=8, Offset='0,3'}">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="14"/>
+                    </Border.StrokeShape>
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="Pending Leaves"
+                                   FontSize="13"
+                                   TextColor="#6B7280"/>
+                            <Label x:Name="PendingValue"
+                                   Text="—"
+                                   FontSize="34"
+                                   FontAttributes="Bold"
+                                   TextColor="#0F172A"/>
+                            <Label Text="Awaiting approval"
+                                   FontSize="12"
+                                   TextColor="#94A3B8"/>
+                        </VerticalStackLayout>
+                        <Ellipse Grid.Column="1"
+                                 Fill="#FFF7ED"
+                                 WidthRequest="44"
+                                 HeightRequest="44"
+                                 HorizontalOptions="End"
+                                 VerticalOptions="Center"/>
+                    </Grid>
+                </Border>
+
+            </Grid>
+
+            <!-- WEEKLY ATTENDANCE -->
+            <Border BackgroundColor="White"
+                    Stroke="#E5E7EB"
+                    StrokeThickness="1"
+                    Padding="16"
+                    Margin="0,6"
+                    Shadow="{Shadow Brush=#000000, Opacity=0.04, Radius=6, Offset='0,2'}">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="14"/>
+                </Border.StrokeShape>
+
+                <VerticalStackLayout Spacing="0">
+                    <Label Text="Weekly Attendance"
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           TextColor="#0F172A"
+                           Margin="0,0,0,14"/>
+
+                    <!-- Mon -->
+                    <Grid ColumnDefinitions="44,*,36"
+                          ColumnSpacing="10"
+                          Padding="4,7">
+                        <Label Text="Mon"
+                               FontSize="13"
+                               FontAttributes="Bold"
+                               TextColor="#475569"
+                               VerticalOptions="Center"/>
+                        <ProgressBar Grid.Column="1"
+                                     x:Name="MonBar"
+                                     HeightRequest="8"
+                                     ProgressColor="#2563EB"
+                                     BackgroundColor="#EFF6FF"
+                                     VerticalOptions="Center"/>
+                        <Label Grid.Column="2"
+                               x:Name="MonCount"
+                               Text="0"
+                               FontSize="13"
+                               FontAttributes="Bold"
+                               TextColor="#0F172A"
+                               HorizontalOptions="End"
+                               VerticalOptions="Center"/>
+                    </Grid>
+
+                    <BoxView HeightRequest="1" Color="#F1F5F9" Margin="4,0"/>
+
+                    <!-- Tue -->
+                    <Grid ColumnDefinitions="44,*,36"
+                          ColumnSpacing="10"
+                          Padding="4,7">
+                        <Label Text="Tue"
+                               FontSize="13"
+                               FontAttributes="Bold"
+                               TextColor="#475569"
+                               VerticalOptions="Center"/>
+                        <ProgressBar Grid.Column="1"
+                                     x:Name="TueBar"
+                                     HeightRequest="8"
+                                     ProgressColor="#2563EB"
+                                     BackgroundColor="#EFF6FF"
+                                     VerticalOptions="Center"/>
+                        <Label Grid.Column="2"
+                               x:Name="TueCount"
+                               Text="0"
+                               FontSize="13"
+                               FontAttributes="Bold"
+                               TextColor="#0F172A"
+                               HorizontalOptions="End"
+                               VerticalOptions="Center"/>
+                    </Grid>
+
+                    <BoxView HeightRequest="1" Color="#F1F5F9" Margin="4,0"/>
+
+                    <!-- Wed -->
+                    <Grid ColumnDefinitions="44,*,36"
+                          ColumnSpacing="10"
+                          Padding="4,7">
+                        <Label Text="Wed"
+                               FontSize="13"
+                               FontAttributes="Bold"
+                               TextColor="#475569"
+                               VerticalOptions="Center"/>
+                        <ProgressBar Grid.Column="1"
+                                     x:Name="WedBar"
+                                     HeightRequest="8"
+                                     ProgressColor="#2563EB"
+                                     BackgroundColor="#EFF6FF"
+                                     VerticalOptions="Center"/>
+                        <Label Grid.Column="2"
+                               x:Name="WedCount"
+                               Text="0"
+                               FontSize="13"
+                               FontAttributes="Bold"
+                               TextColor="#0F172A"
+                               HorizontalOptions="End"
+                               VerticalOptions="Center"/>
+                    </Grid>
+
+                    <BoxView HeightRequest="1" Color="#F1F5F9" Margin="4,0"/>
+
+                    <!-- Thu -->
+                    <Grid ColumnDefinitions="44,*,36"
+                          ColumnSpacing="10"
+                          Padding="4,7">
+                        <Label Text="Thu"
+                               FontSize="13"
+                               FontAttributes="Bold"
+                               TextColor="#475569"
+                               VerticalOptions="Center"/>
+                        <ProgressBar Grid.Column="1"
+                                     x:Name="ThuBar"
+                                     HeightRequest="8"
+                                     ProgressColor="#2563EB"
+                                     BackgroundColor="#EFF6FF"
+                                     VerticalOptions="Center"/>
+                        <Label Grid.Column="2"
+                               x:Name="ThuCount"
+                               Text="0"
+                               FontSize="13"
+                               FontAttributes="Bold"
+                               TextColor="#0F172A"
+                               HorizontalOptions="End"
+                               VerticalOptions="Center"/>
+                    </Grid>
+
+                    <BoxView HeightRequest="1" Color="#F1F5F9" Margin="4,0"/>
+
+                    <!-- Fri -->
+                    <Grid ColumnDefinitions="44,*,36"
+                          ColumnSpacing="10"
+                          Padding="4,7">
+                        <Label Text="Fri"
+                               FontSize="13"
+                               FontAttributes="Bold"
+                               TextColor="#475569"
+                               VerticalOptions="Center"/>
+                        <ProgressBar Grid.Column="1"
+                                     x:Name="FriBar"
+                                     HeightRequest="8"
+                                     ProgressColor="#2563EB"
+                                     BackgroundColor="#EFF6FF"
+                                     VerticalOptions="Center"/>
+                        <Label Grid.Column="2"
+                               x:Name="FriCount"
+                               Text="0"
+                               FontSize="13"
+                               FontAttributes="Bold"
+                               TextColor="#0F172A"
+                               HorizontalOptions="End"
+                               VerticalOptions="Center"/>
+                    </Grid>
+
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- MONTHLY ATTENDANCE RATE -->
+            <Border BackgroundColor="White"
+                    Stroke="#E2E8F0"
+                    StrokeThickness="1"
+                    Padding="16">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="16"/>
+                </Border.StrokeShape>
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="Monthly Attendance Rate"
+                           FontSize="15"
+                           FontAttributes="Bold"
+                           TextColor="#1E293B"/>
+                    <Label x:Name="MonthRateLabel"
+                           Text="Calculating..."
+                           FontSize="13"
+                           TextColor="#64748B"/>
+                    <!-- Per-staff attendance rate bars -->
+                    <VerticalStackLayout x:Name="StaffRatePanel" Spacing="8"/>
+                    <!-- Summary stats row -->
+                    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8" Margin="0,4,0,0">
+                        <Border Grid.Column="0" BackgroundColor="#F0FDF4" Padding="8,6"
+                                Stroke="#BBF7D0" StrokeThickness="1">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="8"/>
+                            </Border.StrokeShape>
+                            <VerticalStackLayout Spacing="2" HorizontalOptions="Center">
+                                <Label x:Name="AvgRateValue" Text="—"
+                                       FontSize="18" FontAttributes="Bold"
+                                       TextColor="#16A34A" HorizontalTextAlignment="Center"/>
+                                <Label Text="Avg Rate" FontSize="10"
+                                       TextColor="#64748B" HorizontalTextAlignment="Center"/>
+                            </VerticalStackLayout>
+                        </Border>
+                        <Border Grid.Column="1" BackgroundColor="#FFF7ED" Padding="8,6"
+                                Stroke="#FED7AA" StrokeThickness="1">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="8"/>
+                            </Border.StrokeShape>
+                            <VerticalStackLayout Spacing="2" HorizontalOptions="Center">
+                                <Label x:Name="TotalLateValue" Text="—"
+                                       FontSize="18" FontAttributes="Bold"
+                                       TextColor="#EA580C" HorizontalTextAlignment="Center"/>
+                                <Label Text="Late Days" FontSize="10"
+                                       TextColor="#64748B" HorizontalTextAlignment="Center"/>
+                            </VerticalStackLayout>
+                        </Border>
+                        <Border Grid.Column="2" BackgroundColor="#EFF6FF" Padding="8,6"
+                                Stroke="#BFDBFE" StrokeThickness="1">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="8"/>
+                            </Border.StrokeShape>
+                            <VerticalStackLayout Spacing="2" HorizontalOptions="Center">
+                                <Label x:Name="WorkingDaysValue" Text="—"
+                                       FontSize="18" FontAttributes="Bold"
+                                       TextColor="#2563EB" HorizontalTextAlignment="Center"/>
+                                <Label Text="Working Days" FontSize="10"
+                                       TextColor="#64748B" HorizontalTextAlignment="Center"/>
+                            </VerticalStackLayout>
+                        </Border>
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- REPORTS -->
+            <Border BackgroundColor="White"
+                    Stroke="#E5E7EB"
+                    StrokeThickness="1"
+                    Padding="16"
+                    Shadow="{Shadow Brush=#000000, Opacity=0.04, Radius=6, Offset='0,2'}">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="14"/>
+                </Border.StrokeShape>
+
+                <VerticalStackLayout Spacing="14">
+                    <Label Text="Reports"
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           TextColor="#0F172A"/>
+                    <Label Text="Download CSV summaries for attendance and leave"
+                           FontSize="13"
+                           TextColor="#6B7280"
+                           Margin="0,-8,0,0"/>
+
+                    <!-- Monthly Attendance Row -->
+                    <Grid ColumnDefinitions="*,Auto"
+                          ColumnSpacing="12"
+                          VerticalOptions="Center">
+                        <VerticalStackLayout Spacing="3" VerticalOptions="Center">
+                            <Label Text="Monthly Attendance"
+                                   FontSize="15"
+                                   FontAttributes="Bold"
+                                   TextColor="#0F172A"/>
+                            <Label Text="CSV of daily staff attendance"
+                                   FontSize="12"
+                                   TextColor="#64748B"/>
+                        </VerticalStackLayout>
+                        <Button Grid.Column="1"
+                                Text="Download"
+                                Clicked="OnDownloadAttendance"
+                                BackgroundColor="#2196F3"
+                                TextColor="White"
+                                CornerRadius="12"
+                                HeightRequest="46"
+                                WidthRequest="115"
+                                FontAttributes="Bold"
+                                FontSize="13"
+                                VerticalOptions="Center"/>
+                    </Grid>
+
+                    <BoxView HeightRequest="1" Color="#F1F5F9"/>
+
+                    <!-- Leave Summary Row -->
+                    <Grid ColumnDefinitions="*,Auto"
+                          ColumnSpacing="12"
+                          VerticalOptions="Center">
+                        <VerticalStackLayout Spacing="3" VerticalOptions="Center">
+                            <Label Text="Leave Summary"
+                                   FontSize="15"
+                                   FontAttributes="Bold"
+                                   TextColor="#0F172A"/>
+                            <Label Text="CSV of all leave requests"
+                                   FontSize="12"
+                                   TextColor="#64748B"/>
+                        </VerticalStackLayout>
+                        <Button Grid.Column="1"
+                                Text="Download"
+                                Clicked="OnDownloadLeave"
+                                Pressed="OnActionPressed"
+                                Released="OnActionReleased"
+                                BackgroundColor="#2196F3"
+                                TextColor="White"
+                                CornerRadius="12"
+                                HeightRequest="46"
+                                WidthRequest="115"
+                                FontAttributes="Bold"
+                                FontSize="13"
+                                VerticalOptions="Center"/>
+                    </Grid>
+
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

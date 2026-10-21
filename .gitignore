@@ -1,0 +1,16 @@
+# .NET / MAUI build output
+bin/
+obj/
+**/bin/
+**/obj/
+# Visual Studio
+.vs/
+*.user
+*.suo
+# Archives and local DB
+*.zip
+*.db
+*.sqlite
+*.sqlite3
+# Local data
+*.db-journal

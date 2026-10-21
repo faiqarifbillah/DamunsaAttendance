@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!-- Colors -->
+    <Color x:Key="Primary">#2563EB</Color>
+    <Color x:Key="Bg">#F9FAFB</Color>
+    <Color x:Key="CardBg">#FFFFFF</Color>
+    <Color x:Key="Muted">#6B7280</Color>
+    <Color x:Key="Border">#E5E7EB</Color>
+    <Color x:Key="Success">#22C55E</Color>
+    <Color x:Key="Danger">#EF4444</Color>
+    <Color x:Key="Warning">#F59E0B</Color>
+
+    <!-- Card -->
+    <Style x:Key="CardStyle" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{StaticResource CardBg}" />
+        <Setter Property="Stroke" Value="{StaticResource Border}" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="StrokeShape">
+            <Setter.Value>
+                <RoundRectangle CornerRadius="16"/>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Padding" Value="16" />
+        <Setter Property="Shadow">
+            <Setter.Value>
+                <Shadow Opacity="0.12" Radius="16" Offset="0,6"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Primary button -->
+    <Style x:Key="PrimaryButton" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
+        <Setter Property="TextColor" Value="White" />
+        <Setter Property="CornerRadius" Value="14" />
+        <Setter Property="Padding" Value="14,12" />
+        <Setter Property="FontAttributes" Value="Bold" />
+    </Style>
+
+    <!-- Outline button -->
+    <Style x:Key="OutlineButton" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="TextColor" Value="Black" />
+        <Setter Property="BorderColor" Value="{StaticResource Border}" />
+        <Setter Property="BorderWidth" Value="1" />
+        <Setter Property="CornerRadius" Value="14" />
+        <Setter Property="Padding" Value="14,12" />
+        <Setter Property="FontAttributes" Value="Bold" />
+    </Style>
+
+</ResourceDictionary>
